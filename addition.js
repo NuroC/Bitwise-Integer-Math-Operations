@@ -1,41 +1,6 @@
-const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER;
 const BYTE_MASK = 0xff;
-const isSafeInteger = (x) => Number.isSafeInteger(x);
-const isFiniteNumber = (x) => Number.isFinite(x);
-const isNonNegative = (x) => x >= 0;
-
-const checks = [{
-        check: (x, y) => isSafeInteger(x) && isSafeInteger(y),
-        error: 'Both x and y must be safe integers'
-    },
-    {
-        check: (x, y) => isFiniteNumber(x) && isFiniteNumber(y),
-        error: 'Both x and y must be finite numbers'
-    },
-    {
-        check: (x, y) => isNonNegative(x) && isNonNegative(y),
-        error: 'Both x and y must be non-negative numbers'
-    },
-    {
-        check: (x, y) => x <= MAX_SAFE_INTEGER && y <= MAX_SAFE_INTEGER,
-        error: `Both x and y must be less than or equal to ${MAX_SAFE_INTEGER}`
-    },
-    {
-        check: (x, y) => x !== y,
-        error: "Both x and y can not be same variable reference"
-    },
-];
 
 function safeBitwiseAdd(x, y) {
-    const checkRes = checks.map((check) => check.check(x, y))
-        .every(Boolean);
-    if (!checkRes) throw new TypeError(checks.filter((check) => !check.check(x, y))[0].error);
-
-    const result = x + y;
-    if (result > MAX_SAFE_INTEGER) {
-        throw new RangeError(`The result exceeds the safe integer range ${MAX_SAFE_INTEGER}`);
-    }
-
     let byte0_x = x & BYTE_MASK;
     let byte1_x = (x >> 8) & BYTE_MASK;
     let byte2_x = (x >> 16) & BYTE_MASK;
